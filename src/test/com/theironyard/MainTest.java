@@ -15,7 +15,6 @@ public class MainTest {
 
     public Connection startConnection () throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:h2:mem:test");
-        Main.createTables(conn);
         return conn;
     }
     @Test
@@ -26,14 +25,14 @@ public class MainTest {
         conn.close();
         assertTrue(user != null);
     }
-    @Test
-    public void testItems() throws SQLException {
-        Connection conn = startConnection();
-        Main.addUser(conn, "Alice", "");
-        User user = Main.selectUser(conn, "Alice");
-        Main.insertItems(conn, user.id, "Sword", 247, "steel",false);
-        Items items = Main.selectItems(conn, 1);
-        conn.close();
-        assertTrue(items != null);
-    }
+//    @Test
+//    public void testItems() throws SQLException {
+//        Connection conn = startConnection();
+//        Main.addUser(conn, "Alice", "");
+//        User user = Main.selectUser(conn, "Alice");
+//        Main.insertItems(conn, user.id, "Sword", 247, "steel",false);
+//        Items items = Main.selectItems(conn, 1);
+//        conn.close();
+//        assertTrue(items != null);
+//    }
 }
