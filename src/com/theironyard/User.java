@@ -1,9 +1,11 @@
 package com.theironyard;
 
+import java.util.ArrayList;
+
 /**
  * Created by Keith on 4/25/17.
  */
-public class User {
+public class User extends ArrayList<Character> {
      int id; //private
      String userName; // private
      String password; //private

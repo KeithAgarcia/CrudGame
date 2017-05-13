@@ -5,6 +5,14 @@
     <title>Title</title>
 </head>
 <body>
+{{^userName}}
+<form action="/login" method="post">
+    <input type="text" placeholder="Enter your name" name="loginName"/>
+    <button type="submit">Login</button>
+</form>
+<br>
+{{/userName}}
+
 <form action="/addcharacter" method="post">
     <select name="name">
         <option selected disabled>Choose Name</option>
@@ -43,5 +51,10 @@
     </select>
     <button type="submit">Submit</button>
 </form>
+
+{{#characters}}
+{{name}}
+{{age}}
+{{/characters}}
 </body>
 </html>
