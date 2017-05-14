@@ -11,7 +11,8 @@ public class Character {
     int age;
     int weight;
 
-    public Character(String name, String type, String weapon, int age, int weight) {
+    public Character(int id, String name, String type, String weapon, int age, int weight) {
+        this.id = id;
         this.name = name;
         this.type = type;
         this.weapon = weapon;

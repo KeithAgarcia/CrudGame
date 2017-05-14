@@ -15,7 +15,7 @@ public class Main {
     public static void createTables(Connection conn) throws SQLException{
         Statement stmt = conn.createStatement();
         stmt.execute("CREATE TABLE IF NOT EXISTS users(id IDENTITY, userName VARCHAR, password VARCHAR )");
-        stmt.execute("CREATE TABLE IF NOT EXISTS characters(id IDENTITY, name VARCHAR, type VARCHAR, weapon VARCHAR, age INTEGER, weight INTEGER)");
+        stmt.execute("CREATE TABLE IF NOT EXISTS characters(id IDENTITY, user_id INT, name VARCHAR, type VARCHAR, weapon VARCHAR, age INTEGER, weight INTEGER)");
 
     }
 
@@ -38,19 +38,20 @@ public class Main {
         }
         return null;
     }
-    public static void insertCharacter(Connection conn, String name, String type, String weapon, int age, int weight) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("INSERT into characters VALUES(NULL, ?, ?, ?, ?, ?)");
-        stmt.setString(1, name);
-        stmt.setString(2, type);
-        stmt.setString(3, weapon);
-        stmt.setInt(4, age);
-        stmt.setInt(5, weight);
+    public static void insertCharacter(Connection conn, int userId, String name, String type, String weapon, int age, int weight) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("INSERT into characters VALUES(NULL, ?, ?, ?, ?, ?, ?)");
+        stmt.setInt(1, userId);
+        stmt.setString(2, name);
+        stmt.setString(3, type);
+        stmt.setString(4, weapon);
+        stmt.setInt(5, age);
+        stmt.setInt(6, weight);
         stmt.execute();
     }
 
     public static ArrayList<Character> selectCharacter(Connection conn, String name) throws SQLException{
         ArrayList<Character> characters = new ArrayList<>();
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM characters INNER JOIN users ON characters.id = users.id WHERE characters.id = ?");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM characters WHERE user_id = ?");
         stmt.setString(1, name);
         ResultSet results = stmt.executeQuery();
 
@@ -60,7 +61,7 @@ public class Main {
             String weapon = results.getString("characters.weapon");
             int age = results.getInt("characters.age");
             int weight = results.getInt("characters.weight");
-            Character character = new Character(name, type, weapon, age, weight);
+            Character character = new Character(id, name, type, weapon, age, weight);
             characters.add(character);
         }
 
@@ -146,7 +147,8 @@ public class Main {
                     int age = Integer.valueOf(request.queryParams("age"));
                     int weight = Integer.valueOf(request.queryParams("weight"));
 
-                    insertCharacter(conn, name, type, weapon, age, weight);
+                    User user = selectUser(conn, userName);
+                    insertCharacter(conn, user.getId(), name, type, weapon, age, weight);
 
                     session.attribute("name", name);
                     session.attribute("type", type);
