@@ -38,7 +38,7 @@ public class Main {
         }
         return null;
     }
-    public static void insertCharacter(Connection conn, int id, String name, String type, String weapon, int age, int weight) throws SQLException {
+    public static void insertCharacter(Connection conn, String name, String type, String weapon, int age, int weight) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("INSERT into characters VALUES(NULL, ?, ?, ?, ?, ?)");
         stmt.setString(1, name);
         stmt.setString(2, type);
@@ -46,6 +46,25 @@ public class Main {
         stmt.setInt(4, age);
         stmt.setInt(5, weight);
         stmt.execute();
+    }
+
+    public static ArrayList<Character> selectCharacter(Connection conn, String name) throws SQLException{
+        ArrayList<Character> characters = new ArrayList<>();
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM characters INNER JOIN users ON characters.id = users.id WHERE characters.id = ?");
+        stmt.setString(1, name);
+        ResultSet results = stmt.executeQuery();
+
+        if (results.next()){
+            int id = results.getInt("characters.id");
+            String type = results.getString("characters.type");
+            String weapon = results.getString("characters.weapon");
+            int age = results.getInt("characters.age");
+            int weight = results.getInt("characters.weight");
+            Character character = new Character(name, type, weapon, age, weight);
+            characters.add(character);
+        }
+
+        return characters;
     }
 
     public static void main(String[] args) throws SQLException {
@@ -59,8 +78,18 @@ public class Main {
                 ((request, response) -> {
                     Session session = request.session();
                     String userName = session.attribute("userName");
+                    String name = session.attribute("name");
+                    String type = session.attribute("type");
+                    String weapon = session.attribute("weapon");
+
+
                     HashMap m = new HashMap();
                     m.put("userName", userName);
+                    m.put("name", name);
+                    m.put("type", type);
+                    m.put("weapon", weapon);
+
+
                     return new ModelAndView(m, "home.html");
 
                 }),
@@ -106,7 +135,6 @@ public class Main {
                 (request, response) -> {
                     Session session = request.session();
                     String userName = session.attribute("userName");
-                    ArrayList<Character> characters = new ArrayList<>();
 
                     if (userName == null){
                         throw new Exception("Not logged in.");
@@ -118,11 +146,13 @@ public class Main {
                     int age = Integer.valueOf(request.queryParams("age"));
                     int weight = Integer.valueOf(request.queryParams("weight"));
 
-                    Character character = new Character(name, type, weapon, age, weight);
-                    characters.add(character);
+                    insertCharacter(conn, name, type, weapon, age, weight);
 
-                    User user = selectUser(conn, userName);
-                    insertCharacter(conn, user.getId(), name, type, weapon, age, weight);
+                    session.attribute("name", name);
+                    session.attribute("type", type);
+                    session.attribute("weapon", weapon);
+                    session.attribute("age", age);
+                    session.attribute("weight", weight);
 
                     response.redirect("/");
                     return "";

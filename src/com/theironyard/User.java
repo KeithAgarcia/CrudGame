@@ -6,9 +6,9 @@ import java.util.ArrayList;
  * Created by Keith on 4/25/17.
  */
 public class User extends ArrayList<Character> {
-     int id; //private
-     String userName; // private
-     String password; //private
+     private int id; //private
+     private String userName; // private
+     private String password; //private
 
     public User(Integer id, String userName, String password) {
         this.id = id;
