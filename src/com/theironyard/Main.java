@@ -60,10 +60,9 @@ public class Main {
                     Session session = request.session();
                     String userName = session.attribute("userName");
                     HashMap m = new HashMap();
-                    ArrayList<Character> characters = selectUser(conn, userName);
-                    m.put("characters", characters);
                     m.put("userName", userName);
                     return new ModelAndView(m, "home.html");
+
                 }),
                     new MustacheTemplateEngine()
         );
@@ -107,6 +106,7 @@ public class Main {
                 (request, response) -> {
                     Session session = request.session();
                     String userName = session.attribute("userName");
+                    ArrayList<Character> characters = new ArrayList<>();
 
                     if (userName == null){
                         throw new Exception("Not logged in.");
@@ -118,8 +118,12 @@ public class Main {
                     int age = Integer.valueOf(request.queryParams("age"));
                     int weight = Integer.valueOf(request.queryParams("weight"));
 
+                    Character character = new Character(name, type, weapon, age, weight);
+                    characters.add(character);
+
                     User user = selectUser(conn, userName);
                     insertCharacter(conn, user.getId(), name, type, weapon, age, weight);
+
                     response.redirect("/");
                     return "";
                 }
