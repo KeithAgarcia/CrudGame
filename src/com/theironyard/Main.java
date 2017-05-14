@@ -40,9 +40,9 @@ public class Main {
     }
     public static void insertCharacter(Connection conn, int id, String name, String type, String weapon, int age, int weight) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("INSERT into characters VALUES(NULL, ?, ?, ?, ?, ?)");
-        stmt.setInt(1, id);
-        stmt.setString(2, name);
-        stmt.setString(3, type);
+        stmt.setString(1, name);
+        stmt.setString(2, type);
+        stmt.setString(3, weapon);
         stmt.setInt(4, age);
         stmt.setInt(5, weight);
         stmt.execute();
