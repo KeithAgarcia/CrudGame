@@ -863,3 +863,46 @@ SELECT * FROM CHARACTERS where uer_id [42122-191]
 2017-05-14 14:15:38 jdbc[5]: exception
 org.h2.jdbc.JdbcSQLException: Data conversion error converting "elf"; SQL statement:
 SELECT * FROM CHARACTERS where type [22018-191]
+2017-05-15 12:44:14 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT * FROM items WHERE order_id = ?[*]"""; SQL statement:
+SELECT * FROM items WHERE order_id = ?" [42000-191]
+2017-05-15 12:44:21 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Table "ITEMS" not found; SQL statement:
+SELECT * FROM items WHERE order_id =  1 [42102-191]
+2017-05-15 12:44:37 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Table "ITEMS" not found; SQL statement:
+SELECT * FROM items WHERE user_id = 1 [42102-191]
+2017-05-15 12:44:38 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Table "ITEMS" not found; SQL statement:
+SELECT * FROM items WHERE user_id = 1 [42102-191]
+2017-05-15 14:54:06 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Data conversion error converting "Keith"; SQL statement:
+SELECT * FROM users WHERE username [22018-191]
+2017-05-15 14:54:12 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT * FROM USERS WHERE USERNAME = [*]"; expected "ALL, ANY, SOME"; SQL statement:
+SELECT * FROM users WHERE username = [42001-191]
+2017-05-15 15:02:54 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Data conversion error converting "Keith"; SQL statement:
+SELECT * FROM characters WHERE user_id = ? [22018-191]
+2017-05-15 15:07:49 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Parameter "#1" is not set; SQL statement:
+SELECT * FROM characters WHERE user_id = (select id from users where userName = ?) [90012-191]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:345)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.Parameter.checkSet(Parameter.java:81)
+	at org.h2.command.Prepared.checkParameters(Prepared.java:164)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:109)
+	at org.h2.command.Command.executeQuery(Command.java:201)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:179)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:158)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1388)
+	at org.h2.server.web.WebApp.query(WebApp.java:1061)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1023)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1010)
+	at org.h2.server.web.WebThread.process(WebThread.java:164)
+	at org.h2.server.web.WebThread.run(WebThread.java:89)
+	at java.lang.Thread.run(Thread.java:745)
+2017-05-15 15:07:53 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT * FROM CHARACTERS WHERE USER_ID = (SELECT ID FROM USERS WHERE USERNAME = 'Keith' [*]"; expected "[, ::, *, /, %, +, -, ||, ~, !~, NOT, LIKE, REGEXP, IS, IN, BETWEEN, AND, OR, GROUP, HAVING, UNION, MINUS, EXCEPT, INTERSECT, ORDER, OFFSET, FETCH, LIMIT, FOR, [, ::, *, /, %, +, -, ||, ~, !~, NOT, LIKE, REGEXP, IS, IN, BETWEEN, AND, OR, ,, )"; SQL statement:
+SELECT * FROM characters WHERE user_id = (select id from users where userName = 'Keith' [42001-191]

@@ -28,7 +28,7 @@ public class Main {
     }
     //selectUser if exists
     public static User selectUser(Connection conn, String userName) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE username = ?");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE userName = ?");
         stmt.setString(1, userName);
         ResultSet results = stmt.executeQuery();
         if (results.next()) {
@@ -51,11 +51,11 @@ public class Main {
 
     public static ArrayList<Character> selectCharacter(Connection conn, String name) throws SQLException{
         ArrayList<Character> characters = new ArrayList<>();
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM characters WHERE user_id = ?");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM characters WHERE user_id = (select id from users where userName = ?)");
         stmt.setString(1, name);
         ResultSet results = stmt.executeQuery();
 
-        if (results.next()){
+        while (results.next()){
             int id = results.getInt("characters.id");
             String type = results.getString("characters.type");
             String weapon = results.getString("characters.weapon");
@@ -79,17 +79,11 @@ public class Main {
                 ((request, response) -> {
                     Session session = request.session();
                     String userName = session.attribute("userName");
-                    String name = session.attribute("name");
-                    String type = session.attribute("type");
-                    String weapon = session.attribute("weapon");
-
 
                     HashMap m = new HashMap();
+                    ArrayList<Character> characters = selectCharacter(conn, userName);
                     m.put("userName", userName);
-                    m.put("name", name);
-                    m.put("type", type);
-                    m.put("weapon", weapon);
-
+                    m.put("characters", characters);
 
                     return new ModelAndView(m, "home.html");
 
@@ -149,12 +143,6 @@ public class Main {
 
                     User user = selectUser(conn, userName);
                     insertCharacter(conn, user.getId(), name, type, weapon, age, weight);
-
-                    session.attribute("name", name);
-                    session.attribute("type", type);
-                    session.attribute("weapon", weapon);
-                    session.attribute("age", age);
-                    session.attribute("weight", weight);
 
                     response.redirect("/");
                     return "";
