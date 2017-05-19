@@ -95,6 +95,7 @@ public class Main {
                 ((request, response) -> {
                     // get the username from a post request
                     String userName = request.queryParams("loginName");
+                    String password = request.queryParams("password");
                     if (userName == null) {
                         throw new Exception("Login name not found.");
                     }
@@ -103,13 +104,18 @@ public class Main {
                     User user = selectUser(conn, userName);
                     if (user == null) {
                         // ..insert the user if there is none
-                        addUser(conn, userName, "");
+                        addUser(conn, userName, password);
+                        Session session = request.session();
+                        session.attribute("userName", userName);
                     }
-
-                    // store username in session for future requests.
-                    Session session = request.session();
-                    session.attribute("userName", userName);
-
+                    if(!(user == null)){
+                        if(password == null){
+                            response.redirect("/");
+                        } else{
+                            Session session = request.session();
+                            session.attribute("userName", userName);
+                        }
+                    }
                     response.redirect("/");
                     return "";
                 })
