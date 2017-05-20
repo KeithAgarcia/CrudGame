@@ -51,7 +51,7 @@ public class Main {
 
     public static ArrayList<Character> selectCharacter(Connection conn, String name) throws SQLException{
         ArrayList<Character> characters = new ArrayList<>();
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM characters WHERE user_id = (select id from users where userName = ?)");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM characters INNER JOIN users ON characters.user_id = users.id AND users.userName = ?");
         stmt.setString(1, name);
         ResultSet results = stmt.executeQuery();
 
@@ -96,9 +96,6 @@ public class Main {
                     // get the username from a post request
                     String userName = request.queryParams("loginName");
                     String password = request.queryParams("password");
-                    if (userName == null) {
-                        throw new Exception("Login name not found.");
-                    }
 
                     // try to find user by username
                     User user = selectUser(conn, userName);

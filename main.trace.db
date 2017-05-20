@@ -906,3 +906,6 @@ SELECT * FROM characters WHERE user_id = (select id from users where userName = 
 2017-05-15 15:07:53 jdbc[4]: exception
 org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT * FROM CHARACTERS WHERE USER_ID = (SELECT ID FROM USERS WHERE USERNAME = 'Keith' [*]"; expected "[, ::, *, /, %, +, -, ||, ~, !~, NOT, LIKE, REGEXP, IS, IN, BETWEEN, AND, OR, GROUP, HAVING, UNION, MINUS, EXCEPT, INTERSECT, ORDER, OFFSET, FETCH, LIMIT, FOR, [, ::, *, /, %, +, -, ||, ~, !~, NOT, LIKE, REGEXP, IS, IN, BETWEEN, AND, OR, ,, )"; SQL statement:
 SELECT * FROM characters WHERE user_id = (select id from users where userName = 'Keith' [42001-191]
+2017-05-19 22:40:31 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Table "WEIGHT" not found; SQL statement:
+SELECT * FROM characters INNER JOIN WEIGHT [42102-191]
