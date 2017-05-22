@@ -61,7 +61,8 @@ public class Main {
             String weapon = results.getString("characters.weapon");
             int age = results.getInt("characters.age");
             int weight = results.getInt("characters.weight");
-            Character character = new Character(id, name, type, weapon, age, weight);
+            String charName = results.getString("characters.name");
+            Character character = new Character(id, charName, type, weapon, age, weight);
             characters.add(character);
         }
 
